@@ -14,7 +14,7 @@ def add_date_to_json(date, user):
     data[birth_monthname].append(node)
     with open('db.json', 'w', encoding='utf8') as db:
         json.dump(data, db)
-    return 'День рождения добавлен!'
+    return f'День рождения для {user} добавлен!'
 
 
 def string_to_date(date):
@@ -28,14 +28,16 @@ def string_to_date(date):
 def check_today_birthdays():
     today_timestamp = datetime.now()
     today_date = today_timestamp.strftime('%d.%m')
+    today_monthname = today_timestamp.strftime('%B')
+
     with open('db.json', encoding='utf8') as db:
         data = json.load(db)
-    today_monthname = today_timestamp.strftime('%B')
+
     month_birthdays = data[today_monthname]
-    print(today_date)
-    today_birthdays = set()
     if not month_birthdays:
         return
+
+    today_birthdays = set()
     for month_birthday in month_birthdays:
         if month_birthday['date'] == today_date:
             today_birthdays.add(month_birthday['user'])

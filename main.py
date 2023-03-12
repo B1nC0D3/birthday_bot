@@ -9,6 +9,8 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 HOUR = int(os.getenv('HOURS'))
 MIN = int(os.getenv('MINS'))
+CHANNEL_TO_POST = int(os.getenv('CHANNEL_ID'))
+
 intents = discord.Intents.default()
 intents.message_content = True
 utc = timezone.utc
@@ -23,21 +25,21 @@ async def on_ready():
 
 @bot.command()
 async def add(ctx, date, user):
-    print(date, user)
     response = add_date_to_json(date, user)
     await ctx.send(response)
-    await ctx.send(ctx.channel.id)
 
 
 @tasks.loop(time=time)
 async def check_date():
-    channel = bot.get_channel(1084154236427845792)
-    birthday_people = check_today_birthdays()
-    if not birthday_people:
+    channel = bot.get_channel(CHANNEL_TO_POST)
+    birthday_boys = check_today_birthdays()
+    if not birthday_boys:
         return
-    birthday_people_str = ', '.join(birthday_people)
-    await channel.send(
-        f'Сегодня день рождения у {birthday_people_str}'
-    )
+    for birthday_boy in birthday_boys:
+        msg = 'Друзья, а вы знаете, что сегодня особенный день? ' \
+              f'Ведь именно сегодня на свет появился/лась чудесный/я, удивительный/я и неповторимый/я - {birthday_boy}. ' \
+              'Так давайте же дружно поздравим его/её и пожелаем всего самого лучшего! ' \
+              f'С праздником, {birthday_boy}, спасибо, что ты есть!'
+        await channel.send(msg)
 
 bot.run(TOKEN)
