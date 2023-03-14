@@ -17,8 +17,10 @@ async def on_ready():
 
 
 @bot.command()
-async def add(ctx, date, user):
-    response = await add_user_birthday(ctx, date, user)
+async def add(ctx, date=None, user=None):
+    response = 'Не все аргументы'
+    if date and user:
+        response = await add_user_birthday(ctx, date, user)
     await ctx.send(response)
 
 
