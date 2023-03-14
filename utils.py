@@ -1,6 +1,8 @@
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 from random import choice
+from config import PATH_TO_TEMPLATES
+
 
 TEMPLATES_NAMES = ('1.txt',)
 
@@ -19,7 +21,7 @@ def get_today_date() -> str:
 
 
 def create_message(user_id: int, gender: str):
-    env = Environment(loader=FileSystemLoader('templates/'))
+    env = Environment(loader=FileSystemLoader(PATH_TO_TEMPLATES))
     template = env.get_template(choice(TEMPLATES_NAMES))
     message = template.render(user_id=user_id, gender=gender)
     return message

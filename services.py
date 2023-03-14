@@ -31,6 +31,6 @@ async def add_user_birthday(context: Context, raw_birth_date: str, user: str) ->
 
 def create_msg_for_birthday_boys() -> Generator:
     today_date = get_today_date()
-    users = get_users_by_date('30.01')
+    users = get_users_by_date(today_date)
     for user in users:
         yield create_message(user['user_id'], user['gender'])

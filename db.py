@@ -1,6 +1,7 @@
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB, Query
+from config import PATH_TO_DB
 
-db = TinyDB('db.json')
+db = TinyDB(PATH_TO_DB)
 User = Query()
 
 
