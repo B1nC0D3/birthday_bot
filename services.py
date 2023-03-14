@@ -1,6 +1,6 @@
 from discord.ext.commands.context import Context
 from config import FEMALE_ROLE_ID
-from utils import string_to_date, get_today_date, create_message
+from utils import string_to_date, get_today_date, create_message, get_exception_message
 from db import create, get_users_by_date
 from typing import Generator
 
@@ -9,7 +9,7 @@ async def add_user_birthday(context: Context, raw_birth_date: str, user: str) ->
     try:
         user = await context.guild.fetch_member(int(user[2:-1]))
     except Exception:
-        return 'Инвалидный юзернейм, <@291205539562651648> пидор'
+        return get_exception_message(context.message.author.id)
 
     gender = 'M'
     if user.get_role(FEMALE_ROLE_ID):
