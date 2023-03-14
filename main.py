@@ -1,7 +1,6 @@
 from discord import Intents
 from discord.ext import commands, tasks
-from services import add_user_birthday, create_msg_for_birthday_boys
-from utils import get_exception_message
+from services import add_user_birthday, create_msg_for_birthday_boys, get_paste
 from datetime import timezone, time
 from config import HOUR, MIN, CHANNEL_TO_POST, TOKEN
 
@@ -19,16 +18,23 @@ async def on_ready():
 
 @bot.command()
 async def add(ctx, date=None, user=None):
-    response = get_exception_message(ctx.message.author.id)
-    if date and user:
-        response = await add_user_birthday(ctx, date, user)
+    response = await add_user_birthday(ctx, date, user)
     await ctx.send(response)
 
 
 @bot.command()
 async def test(ctx):
+    # my discord id
+    if ctx.message.author.id != 237542033697406986:
+        return
     for msg in create_msg_for_birthday_boys():
         await ctx.send(msg)
+
+
+@bot.command()
+async def pain(ctx, user=None):
+    response = await get_paste(ctx, user)
+    await ctx.send(response)
 
 
 @tasks.loop(time=time)
