@@ -1,11 +1,11 @@
-import discord
+from discord import Intents
 from discord.ext import commands, tasks
 from services import add_user_birthday, create_msg_for_birthday_boys
 from utils import get_exception_message
 from datetime import timezone, time
 from config import HOUR, MIN, CHANNEL_TO_POST, TOKEN
 
-intents = discord.Intents.default()
+intents = Intents.default()
 intents.message_content = True
 utc = timezone.utc
 time = time(hour=HOUR, minute=MIN, tzinfo=utc)
