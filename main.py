@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands, tasks
 from services import add_user_birthday, create_msg_for_birthday_boys
+from utils import get_exception_message
 from datetime import timezone, time
 from config import HOUR, MIN, CHANNEL_TO_POST, TOKEN
 
@@ -18,7 +19,7 @@ async def on_ready():
 
 @bot.command()
 async def add(ctx, date=None, user=None):
-    response = 'Не все аргументы'
+    response = get_exception_message(ctx.message.author.id)
     if date and user:
         response = await add_user_birthday(ctx, date, user)
     await ctx.send(response)
