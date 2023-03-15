@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 from services import add_user_birthday, create_msg_for_birthday_boys, get_paste
 from datetime import timezone, time
 from config import HOUR, MIN, CHANNEL_TO_POST, TOKEN
+from discord.ext.commands.context import Context
 
 intents = Intents.default()
 intents.message_content = True
@@ -17,13 +18,15 @@ async def on_ready():
 
 
 @bot.command()
-async def add(ctx, date=None, user=None):
+async def add(ctx: Context, date=None, user=None):
+    await ctx.message.delete()
     response = await add_user_birthday(ctx, date, user)
     await ctx.send(response)
 
 
 @bot.command()
-async def test(ctx):
+async def test(ctx: Context):
+    await ctx.message.delete()
     # my discord id
     if ctx.message.author.id != 237542033697406986:
         return
@@ -33,6 +36,7 @@ async def test(ctx):
 
 @bot.command()
 async def pain(ctx, user=None):
+    await ctx.message.delete()
     response = await get_paste(ctx, user)
     await ctx.send(response)
 
