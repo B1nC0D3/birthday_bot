@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-def validate_date(date):
+def validate_date(date: str):
     if not date:
         return None
     try:
