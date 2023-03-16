@@ -4,6 +4,7 @@ from services import add_user_birthday, create_msg_for_birthday_boys, get_paste
 from datetime import timezone, time
 from config import HOUR, MIN, CHANNEL_TO_POST, TOKEN
 from discord.ext.commands.context import Context
+from discord.ext.commands.errors import NotOwner
 from utils.date_utils import validate_date
 
 intents = Intents.default()
@@ -18,6 +19,14 @@ async def on_ready():
     check_date.start()
 
 
+@bot.listen()
+async def on_command_error(ctx: Context, error):
+    msg = f'Технические шоколадки, пиши <@237542033697406986> ошибка {error}'
+    if isinstance(error, NotOwner):
+        msg = 'Не лезь куда не надо, дам по жопе'
+    await ctx.send(msg, ephemeral=True)
+
+
 @bot.hybrid_command(name='add', description='Добавление пользователя в список дней рождений')
 @app_commands.describe(
         birth_date='Дата в формате дд.мм',
@@ -29,14 +38,14 @@ async def add(ctx: Context, birth_date: validate_date, user: Member):
     await ctx.send(response, ephemeral=True)
 
 
-@bot.hybrid_command(hidden=True)
+@bot.command(hidden=True)
 @commands.is_owner()
 async def test(ctx: Context):
     for msg in create_msg_for_birthday_boys():
         await ctx.send(msg, ephemeral=True)
 
 
-@bot.hybrid_command(hidden=True)
+@bot.command(hidden=True)
 @commands.is_owner()
 async def sync(ctx: Context):
     await bot.tree.sync()
@@ -47,7 +56,6 @@ async def sync(ctx: Context):
 @app_commands.describe(
         user='Выберите юзера с клоунской манерой речи')
 async def pain(ctx, user: Member):
-    await ctx.message.delete()
     response = await get_paste(user)
     await ctx.send(response)
 
