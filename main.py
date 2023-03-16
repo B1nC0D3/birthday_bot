@@ -60,6 +60,11 @@ async def pain(ctx, user: Member):
     await ctx.send(response)
 
 
+@bot.hybrid_command(name='gay', desctiprion='Отпустить гейскую шуточку')
+@app_commands.describe(user='Выберите юзера со странными наклонностями')
+async def gay(ctx, user: Member):
+    await ctx.send('<@406759059866255370>, пидор, не заготовил контента')
+
 @tasks.loop(time=time)
 async def check_date():
     channel = bot.get_channel(CHANNEL_TO_POST)
