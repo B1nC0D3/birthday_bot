@@ -69,6 +69,7 @@ async def gay(ctx, user: Member):
           'P.S. Зефир не заготовил контента.'
     await ctx.send(msg)
 
+
 @tasks.loop(time=time)
 async def check_date():
     channel = bot.get_channel(CHANNEL_TO_POST)
