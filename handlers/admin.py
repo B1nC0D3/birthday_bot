@@ -1,5 +1,8 @@
 from discord.ext import commands
 from discord.ext.commands.context import Context
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Admin(commands.Cog):
@@ -8,12 +11,13 @@ class Admin(commands.Cog):
         self.bot = bot
 
     async def cog_command_error(self, ctx: Context, error: commands.CommandError):
-        if isinstance(error, (commands.BadArgument, commands.MissingRequiredArgument)):
+        await super().cog_command_error(ctx, error)
+        if isinstance(error, (commands.BadArgument, commands.MissingRequiredArgument, commands.CommandNotFound)):
             return await ctx.send('Кожаный, ты совсем дурачок?', ephemeral=True)
         elif isinstance(error, commands.NotOwner):
             return await ctx.send('Кожаный, даже я понимаю что сюда не надо лезть')
         else:
-            print(error)
+            logger.error(error)
             return await ctx.send('Молодец, ты мегамозг, ты все разъебал, вызывай главного')
 
     @commands.hybrid_group(hidden=True)

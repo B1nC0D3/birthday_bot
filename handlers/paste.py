@@ -2,6 +2,9 @@ from discord.ext import commands
 from discord import Member, app_commands
 from discord.ext.commands.context import Context
 from services import PasteService
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Pastes(commands.Cog):
@@ -11,9 +14,10 @@ class Pastes(commands.Cog):
         self.service = service
 
     async def cog_command_error(self, ctx: Context, error: commands.CommandError):
-        if isinstance(error, (commands.BadArgument, commands.MissingRequiredArgument)):
+        if isinstance(error, (commands.BadArgument, commands.MissingRequiredArgument, commands.CommandNotFound)):
             return await ctx.send('Кожаный, ты совсем дурачок?', ephemeral=True)
         else:
+            logger.error(error)
             return await ctx.send('Молодец, ты мегамозг, ты все разъебал, вызывай главного', ephemeral=True)
 
     @commands.hybrid_group(description='Команды связанные с пастами')
@@ -32,7 +36,7 @@ class Pastes(commands.Cog):
     @app_commands.describe(
             first_user='Выберите юзера со странными наклонностями',
             second_user='Выберите второго юзера со странными наклонностями')
-    @app_commands.rename(first_user='пользователь', second_user='пользователь')
+    @app_commands.rename(first_user='пользователь', second_user='второй_пользователь')
     async def gay(self, ctx: Context, first_user: Member, second_user: Member):
         msg = self.service.get_gay_joke([first_user, second_user])
         await ctx.send(msg)
