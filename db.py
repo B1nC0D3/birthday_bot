@@ -17,3 +17,8 @@ def create(user_id: int, birth_date: str, gender: str) -> bool:
 def get_users_by_date(today_date: str) -> list[dict]:
     birthday_boys = db.search(User.birth_date == today_date)
     return birthday_boys
+
+
+def delete(user_id: int) -> bool:
+    instances = db.remove(User.user_id == user_id)
+    return bool(instances)
