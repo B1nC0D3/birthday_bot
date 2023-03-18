@@ -59,7 +59,7 @@ class Birthdays(commands.Cog):
         birth_date = self._validate_date(raw_birth_date)
         if birth_date:
             response = self.service(user).add_user_birthday(birth_date)
-        await ctx.send(response, ephemeral=True)
+        await ctx.send(response, ephemeral=True, delete_after=10)
 
     @birthday.command(description='Удаление пользователя из списка дней рождений')
     @app_commands.describe(
@@ -67,7 +67,7 @@ class Birthdays(commands.Cog):
     @app_commands.rename(user='пользователь')
     async def delete(self, ctx: Context, user: Member):
         response = self.service(user).delete_user_birthday()
-        await ctx.send(response, ephemeral=True)
+        await ctx.send(response, ephemeral=True, delete_after=10)
 
     @tasks.loop(time=_get_task_start_time())
     async def check_date(self):
