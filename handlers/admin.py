@@ -12,7 +12,8 @@ class Admin(commands.Cog):
 
     async def cog_command_error(self, ctx: Context, error: commands.CommandError):
         await super().cog_command_error(ctx, error)
-        if isinstance(error, (commands.BadArgument, commands.MissingRequiredArgument, commands.CommandNotFound)):
+        if isinstance(error, (commands.BadArgument, commands.MissingRequiredArgument,
+                              commands.CommandNotFound, commands.CommandInvokeError)):
             return await ctx.send('Кожаный, ты совсем дурачок?', ephemeral=True)
         elif isinstance(error, commands.NotOwner):
             return await ctx.send('Кожаный, даже я понимаю что сюда не надо лезть')

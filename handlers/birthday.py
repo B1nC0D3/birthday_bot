@@ -15,12 +15,13 @@ class Birthdays(commands.Cog):
         self.bot = bot
         self.service = service
 
-    # async def cog_command_error(self, ctx: Context, error: commands.CommandError):
-    #     if isinstance(error, (commands.BadArgument, commands.MissingRequiredArgument, commands.CommandNotFound)):
-    #         return await ctx.send('Кожаный, ты совсем дурачок?', ephemeral=True)
-    #     else:
-    #         logger.error(error)
-    #         return await ctx.send('Молодец, ты мегамозг, ты все разъебал, вызывай главного', ephemeral=True)
+    async def cog_command_error(self, ctx: Context, error: commands.CommandError):
+        if isinstance(error, (commands.BadArgument, commands.MissingRequiredArgument,
+                              commands.CommandNotFound, commands.CommandInvokeError)):
+            return await ctx.send('Кожаный, ты совсем дурачок?', ephemeral=True)
+        else:
+            logger.error(error)
+            return await ctx.send('Молодец, ты мегамозг, ты все разъебал, вызывай главного', ephemeral=True)
 
     @staticmethod
     def _get_task_start_time():
