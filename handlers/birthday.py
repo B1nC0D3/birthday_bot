@@ -1,8 +1,7 @@
-from discord.ext import commands, tasks
+from discord.ext import commands
 from discord import Member, app_commands
 from discord.ext.commands.context import Context
 import datetime
-from config import HOUR, MIN, CHANNEL_TO_POST
 from services import BirthdayService
 import logging
 
@@ -24,12 +23,6 @@ class Birthdays(commands.Cog):
             return await ctx.send('Молодец, ты мегамозг, ты все разъебал, вызывай главного', ephemeral=True)
 
     @staticmethod
-    def _get_task_start_time():
-        utc = datetime.timezone.utc
-        time = datetime.time(hour=HOUR, minute=MIN, tzinfo=utc)
-        return time
-
-    @staticmethod
     def _validate_date(date: str):
         if not date:
             return None
@@ -38,11 +31,6 @@ class Birthdays(commands.Cog):
         except ValueError:
             return None
         return date.strftime('%d.%m')
-
-    @staticmethod
-    def _get_today_date() -> str:
-        today_date = datetime.datetime.now().strftime('%d.%m')
-        return today_date
 
     @commands.hybrid_group(description='Команды связанные со списком дней рождения')
     async def birthday(self, ctx: Context):
@@ -70,14 +58,8 @@ class Birthdays(commands.Cog):
         response = self.service(user).delete_user_birthday()
         await ctx.send(response, ephemeral=True, delete_after=10)
 
-    @tasks.loop(time=_get_task_start_time())
-    async def check_date(self):
-        channel = self.bot.get_channel(CHANNEL_TO_POST)
-        for msg in self.service('asd').create_msg_for_birthday_boys(self._get_today_date()):
-            await channel.send(msg)
-
 
 async def setup(bot):
     b = Birthdays(bot, BirthdayService)
     await bot.add_cog(b)
-    b.check_date.start()
+
