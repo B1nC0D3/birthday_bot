@@ -9,12 +9,14 @@ from utils.time_utils import get_task_start_time, get_today_date
 
 intents = Intents.default()
 intents.message_content = True
+# TODO move owner_id to env
 bot = commands.Bot(command_prefix='!', intents=intents, owner_id=237542033697406986)
 
 
 @tasks.loop(time=get_task_start_time())
 async def check_date():
     channel = bot.get_channel(CHANNEL_TO_POST)
+    # TODO ETO VOOBSHE CHO???????????????????????????????????? я аж транслитом бахнул
     for msg in BirthdayService('asd').create_msg_for_birthday_boys(get_today_date()):
         await channel.send(msg)
 

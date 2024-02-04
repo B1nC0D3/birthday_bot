@@ -35,6 +35,7 @@ class BirthdayService:
 
     @classmethod
     def create_msg_for_birthday_boys(cls, today_date) -> Generator:
+        # TODO fix dependency of db
         users = get_users_by_date(today_date)
         for user in users:
             yield get_birthday_message(user['user_id'], user['gender'])
